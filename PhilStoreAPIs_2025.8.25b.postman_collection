@@ -1,0 +1,477 @@
+{
+	"info": {
+		"_postman_id": "a8351db7-ba7d-4b77-806e-28ffba879011",
+		"name": "PhilStoreAPIs",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47852352",
+		"_collection_link": "https://phil-fortner-s-team.postman.co/workspace/Team-Workspace~888d53fc-1eb8-4c9e-8cb9-4a4477c31f2b/collection/47852352-a8351db7-ba7d-4b77-806e-28ffba879011?action=share&source=collection_link&creator=47852352"
+	},
+	"item": [
+		{
+			"name": "Get all products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Validate response",
+							"pm.test(\"Status code is 200\", function () ",
+							"{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"//Validate product data types",
+							"pm.test(\"Validate product data types\", function () ",
+							"{",
+							"",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].ID).to.be.a('number');",
+							"    pm.expect(responseJson[0].Brand).to.be.a('string');",
+							"    pm.expect(responseJson[0].Name).to.be.a('string');",
+							"    pm.expect(responseJson[0].Description).to.be.a('string');",
+							"    pm.expect(responseJson[0].CategoryName).to.be.a('string');",
+							"    pm.expect(responseJson[0].IsActive).to.be.a('boolean');",
+							"    pm.expect(String(responseJson[0].RetailPrice)).to.match(/^\\d+\\.\\d+$/); // Validate 0.00 format",
+							"    pm.expect(String(responseJson[0].RegularPrice)).to.match(/^\\d+\\.\\d+$/); // Validate 0.00 format",
+							"    pm.expect(String(responseJson[0].SalePrice)).to.match(/^\\d+\\.\\d+$/); // Validate 0.00 format",
+							"    pm.expect(String(responseJson[0].DateCreated)).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$/);   //YYYY-MM-DDTHH:MM:SS.SSS validation",
+							"    pm.expect(String(responseJson[0].DateModified)).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$/);   //YYYY-MM-DDTHH:MM:SS.SSS validation",
+							"});",
+							"",
+							"",
+							"// Test that the response body contains more than 10 products",
+							"pm.test(\"Response body contains more than 10 products\", function () {",
+							"    var responseJSON = pm.response.json();",
+							"    pm.expect(responseJSON.length).to.be.greaterThan(10, \"The product list should have more than 10 products.\");    ",
+							"});",
+							"",
+							"",
+							"// Test that product values are correct",
+							"pm.test(\"Test that product values are correct\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].ID).to.equal(2);",
+							"    pm.expect(responseJson[0].Brand).to.equal(\"Dewalt\");",
+							"    pm.expect(responseJson[0].Name).to.equal('20V MAX XR Drywall Screwgun');",
+							"    pm.expect(responseJson[0].Description).to.contains('The DCF630 Brushless Drywall Screwgun features');",
+							"    pm.expect(responseJson[0].Description).to.contains('Replaces DCF620B. (Battery sold Separately)');",
+							"    pm.expect(responseJson[0].CategoryName).to.equal('Power Tools');",
+							"    pm.expect(responseJson[0].IsActive).to.equal(true);",
+							"    pm.expect(String(responseJson[0].RetailPrice)).to.equal('219.99');",
+							"    pm.expect(String(responseJson[0].RegularPrice)).to.equal('184.99');",
+							"    pm.expect(String(responseJson[0].SalePrice)).to.equal('199.99');",
+							"    pm.expect(String(responseJson[0].DateCreated)).to.equal('2025-07-26T08:03:22.273');",
+							"    pm.expect(String(responseJson[0].DateModified)).to.equal('2025-07-26T08:03:22.273');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44303/api/products/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test that product values are correct (ID = 2)",
+							"pm.test(\"Test that product values are correct (ID = 2)\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.ID).to.equal(2);",
+							"    pm.expect(responseJson.Brand).to.equal(\"Dewalt\");",
+							"    pm.expect(responseJson.Name).to.equal('20V MAX XR Drywall Screwgun');",
+							"    pm.expect(responseJson.Description).to.contains('The DCF630 Brushless Drywall Screwgun features');",
+							"    pm.expect(responseJson.Description).to.contains('Replaces DCF620B. (Battery sold Separately)');",
+							"    pm.expect(responseJson.CategoryName).to.equal('Power Tools');",
+							"    pm.expect(responseJson.IsActive).to.equal(true);",
+							"    pm.expect(String(responseJson.RetailPrice)).to.equal('219.99');",
+							"    pm.expect(String(responseJson.RegularPrice)).to.equal('184.99');",
+							"    pm.expect(String(responseJson.SalePrice)).to.equal('199.99');",
+							"    pm.expect(String(responseJson.DateCreated)).to.equal('2025-07-26T08:03:22.273');",
+							"    pm.expect(String(responseJson.DateModified)).to.equal('2025-07-26T08:03:22.273');",
+							"});",
+							"",
+							"// Test that product values are correct (ID = 3)",
+							"pm.test(\"Test that product values are correct (ID = 3)\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.ID).to.equal(3);",
+							"    pm.expect(responseJson.Brand).to.equal(\"Milwaukee\");",
+							"    pm.expect(responseJson.Name).to.equal('Milwaukee M18 FUEL 1/4inch Hex Impact Driver');",
+							"    pm.expect(responseJson.Description).to.contains('The MILWAUKEE® M18 FUEL™ 1/4” Hex Impact Driver');",
+							"    pm.expect(responseJson.Description).to.contains('This new impact driver also features Tri-LE');",
+							"    pm.expect(responseJson.CategoryName).to.equal('Power Tools');",
+							"    pm.expect(responseJson.IsActive).to.equal(true);",
+							"    pm.expect(String(responseJson.RetailPrice)).to.equal('164.95');",
+							"    pm.expect(String(responseJson.RegularPrice)).to.equal('149.95');",
+							"    pm.expect(String(responseJson.SalePrice)).to.equal('142.99');",
+							"    pm.expect(String(responseJson.DateCreated)).to.equal('2025-07-26T08:06:11.063');",
+							"    pm.expect(String(responseJson.DateModified)).to.equal('2025-07-26T08:06:11.063');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44303/api/products/?id=3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "3"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Insert new product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Brand\": \"Brand Test14\",\n    \"Name\": \"Name Test14\",\n    \"Description\": \"Sample description goes right here\",\n    \"CategoryID\": 6,\n    \"IsActive\": 1,\n    \"RetailPrice\": 10.99,\n    \"RegularPrice\": 9.99,\n    \"SalePrice\": 8.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44303/api/products/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Get latest product ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Validate response",
+							"pm.test(\"Status code is 200\", function () ",
+							"{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"// Test that product values are correct",
+							"pm.test(\"Test that product values are correct\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    //pm.expect(responseJson[0].ID).to.equal(2);",
+							"    ",
+							"    for (let i = 0; i < responseJson.length; i++) {",
+							"    console.log(\"responseJson.length \" + responseJson.length);",
+							"    // You can perform actions here, like setting environment variables",
+							"    // pm.environment.set(\"currentItem\", myArray[i]);",
+							"    // then use {{lastRecordID}} in your request",
+							"    }",
+							"    //Set env variable for last record ID",
+							"    var LatestProductID;",
+							"    LatestProductID = responseJson[responseJson.length - 1].ID;",
+							"    console.log(\"LatestProductID = \" + LatestProductID);",
+							"    pm.environment.set(\"lastRecordID\", responseJson[responseJson.length - 1].ID);",
+							"    ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44303/api/products/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Get product by latest ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test that product values are correct (ID = 2)",
+							"pm.test(\"Test that product values are correct (ID = 2)\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.ID).to.equal(2);",
+							"    pm.expect(responseJson.Brand).to.equal(\"Dewalt\");",
+							"    pm.expect(responseJson.Name).to.equal('20V MAX XR Drywall Screwgun');",
+							"    pm.expect(responseJson.Description).to.contains('The DCF630 Brushless Drywall Screwgun features');",
+							"    pm.expect(responseJson.Description).to.contains('Replaces DCF620B. (Battery sold Separately)');",
+							"    pm.expect(responseJson.CategoryName).to.equal('Power Tools');",
+							"    pm.expect(responseJson.IsActive).to.equal(true);",
+							"    pm.expect(String(responseJson.RetailPrice)).to.equal('219.99');",
+							"    pm.expect(String(responseJson.RegularPrice)).to.equal('184.99');",
+							"    pm.expect(String(responseJson.SalePrice)).to.equal('199.99');",
+							"    pm.expect(String(responseJson.DateCreated)).to.equal('2025-07-26T08:03:22.273');",
+							"    pm.expect(String(responseJson.DateModified)).to.equal('2025-07-26T08:03:22.273');",
+							"});",
+							"",
+							"// Test that product values are correct (ID = 3)",
+							"pm.test(\"Test that product values are correct (ID = 3)\", function () ",
+							"{",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.ID).to.equal(3);",
+							"    pm.expect(responseJson.Brand).to.equal(\"Milwaukee\");",
+							"    pm.expect(responseJson.Name).to.equal('Milwaukee M18 FUEL 1/4inch Hex Impact Driver');",
+							"    pm.expect(responseJson.Description).to.contains('The MILWAUKEE® M18 FUEL™ 1/4” Hex Impact Driver');",
+							"    pm.expect(responseJson.Description).to.contains('This new impact driver also features Tri-LE');",
+							"    pm.expect(responseJson.CategoryName).to.equal('Power Tools');",
+							"    pm.expect(responseJson.IsActive).to.equal(true);",
+							"    pm.expect(String(responseJson.RetailPrice)).to.equal('164.95');",
+							"    pm.expect(String(responseJson.RegularPrice)).to.equal('149.95');",
+							"    pm.expect(String(responseJson.SalePrice)).to.equal('142.99');",
+							"    pm.expect(String(responseJson.DateCreated)).to.equal('2025-07-26T08:06:11.063');",
+							"    pm.expect(String(responseJson.DateModified)).to.equal('2025-07-26T08:06:11.063');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44303/api/products/?id={{lastRecordID}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{lastRecordID}}"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Update product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Brand\": \"Brand Test4\",\n    \"Name\": \"Name Test1\",\n    \"Description\": \"Sample description goes right here due to rabbits\",\n    \"CategoryID\": 6,\n    \"IsActive\": 1,\n    \"RetailPrice\": 10.99,\n    \"RegularPrice\": 9.99,\n    \"SalePrice\": 8.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44303/api/products/?id=33",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "33"
+						}
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Brand\": \"Brand Test9\",\n    \"Name\": \"Name Test1\",\n    \"Description\": \"Sample description goes right here\",\n    \"CategoryID\": 6,\n    \"IsActive\": 1,\n    \"RetailPrice\": 10.99,\n    \"RegularPrice\": 9.99,\n    \"SalePrice\": 8.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44303/api/products/?id=44",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44303",
+					"path": [
+						"api",
+						"products",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "44"
+						}
+					]
+				},
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		}
+	]
+}
