@@ -17,3 +17,5 @@ The REST APIs are functionally as follows, please refer to the Postman collectio
 3. POST InsertProduct
 4. PUT UpdateProduct
 5. DELETE DeleteProduct
+
+### Each API has Postman test validations
