@@ -1,5 +1,5 @@
 # Phil REST API Examples
-Welcome! This is some example code I put together that creates several REST APIs which serve as the microservices layer for my SQL database (other repo).  The end goal was to provide a complete demo from database to API to Postman collection and tests.
+Welcome! This is some example code I put together that creates several REST APIs which serve as the microservices layer for my SQL database.  The end goal is to provide a complete demo from database to API to Postman collection and tests.
 
 Setup Instructions:
 1. Clone the PhilStoreAPI repository to your local and build the project.
