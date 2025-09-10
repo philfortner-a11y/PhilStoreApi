@@ -2,7 +2,7 @@
 Welcome! This is some example code I put together that creates several REST APIs which serve as the microservices layer for my SQL database.  The end goal is to provide a complete demo from database to API to Postman collection and tests.
 
 Setup Instructions:
-1. Clone the PhilStoreAPI repository to your local and build the project.
+1. In Visual Studio 2022 clone the PhilStoreAPI repository to your local and build the project.
 2. Download from this repo the file "dbPhilStore_2025.07.27c.bak" and restore the full backup to your local SQL Server Management Studio.
 3. Download from this repo the file "PhilStoreAPIs_2025.8.25b.postman_collection" and import this collection to Postman.
 4. Download from this repo the file "Development.postman_environment.json" and import this environment to Postman.
